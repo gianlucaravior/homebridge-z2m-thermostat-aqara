@@ -1,15 +1,15 @@
 {
-  "name": "homebridge-z2m-thermostat",
+  "name": "homebridge-z2m-thermostat-aqara",
   "displayName": "z2m-thermostat",
   "version": "1.0.2",
-  "description": "Combine a temperature sensor and a control outlet to create a thermostat",
+  "description": "Combine a temperature sensor and a control outlet to create a thermostat for aqara",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/augustskare/homebridge-z2m-thermostat.git"
+    "url": "git://github.com/augustskare/homebridge-z2m-thermostat-aqara.git"
   },
   "bugs": {
-    "url": "https://github.com/augustskare/homebridge-z2m-thermostat/issues"
+    "url": "https://github.com/augustskare/homebridge-z2m-thermostat-aqara/issues"
   },
   "engines": {
     "node": ">=10.17.0",
