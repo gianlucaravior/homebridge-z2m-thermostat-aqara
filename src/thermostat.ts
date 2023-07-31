@@ -14,7 +14,7 @@ interface Temperature {
   humidity: number;
   linkquality: number;
   pressure: number;
-  occupied_heating_setpoint: number;
+  temperature: number;
   voltage: number;
 }
 
