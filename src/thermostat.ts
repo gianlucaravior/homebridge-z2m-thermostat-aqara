@@ -142,11 +142,12 @@ class Thermostat implements AccessoryPlugin {
 
   updateOutletState(value: CharacteristicValue): Promise<CharacteristicValue> {
     const system_mode = value === 0 ? "off" : "heat";
+    const occupied_heating_setpoint = this.service.getCharacteristic(this.characteristic.TargetTemperature);
     const topic = this.topic(this.config.outlet) + "/set";
     return new Promise((resolve, reject) => {
       this.mqttClient.publish(
         topic,
-        JSON.stringify({ system_mode }),
+        JSON.stringify({ system_mode, occupied_heating_setpoint }),
         { qos: 2 },
         (error) => {
           if (error) {
