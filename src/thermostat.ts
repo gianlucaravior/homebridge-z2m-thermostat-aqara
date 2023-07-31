@@ -120,6 +120,9 @@ class Thermostat implements AccessoryPlugin {
       .getCharacteristic(this.characteristic.CurrentTemperature)
       .updateValue(state.temperature);
     this.service
+      .getCharacteristic(this.characteristic.TargetTemperature)
+      .updateValue(state.targetTemperature);
+    this.service
       .getCharacteristic(this.characteristic.CurrentRelativeHumidity)
       .updateValue(state.humidity);
     this.service
@@ -128,7 +131,7 @@ class Thermostat implements AccessoryPlugin {
 
     const outletState = this.outletState(state);
     if (outletState !== this.outletState(oldState)) {
-      await this.updateOutletState(outletState);
+      await this.updateOutletState(outletState, state.targetTemperature);
     }
   }
 
@@ -140,9 +143,9 @@ class Thermostat implements AccessoryPlugin {
     return targetHeatingState === 0 || currentHeaterState === 0 ? 0 : 1;
   }
 
-  updateOutletState(value: CharacteristicValue): Promise<CharacteristicValue> {
+  updateOutletState(value: CharacteristicValue, target: CharacteristicValue,): Promise<CharacteristicValue> {
     const system_mode = value === 0 ? "off" : "heat";
-    const occupied_heating_setpoint = targetTemperature;
+    const occupied_heating_setpoint = target;
     const topic = this.topic(this.config.outlet) + "/set";
     return new Promise((resolve, reject) => {
       this.mqttClient.publish(
