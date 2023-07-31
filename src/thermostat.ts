@@ -136,13 +136,13 @@ class Thermostat implements AccessoryPlugin {
     return `${this.config.mqtt.base_topic || "zigbee2mqtt"}/${value}`;
   }
 
-  outletState({ targetHeatingState, currentHeaterState, system_mode }: AccessoryState) {
-    return targetHeatingState === 0 || currentHeaterState === 0 ? 0 : 1 || system_mode === "off" ? 0 : 1;
+  outletState({ targetHeatingState, currentHeaterState }: AccessoryState) {
+    return targetHeatingState === 0 || currentHeaterState === 0 ? 0 : 1;
   }
 
   updateOutletState(value: CharacteristicValue): Promise<CharacteristicValue> {
     const system_mode = value === 0 ? "off" : "heat";
-    const occupied_heating_setpoint = this.state.targetTemperature;
+    const occupied_heating_setpoint = targetTemperature;
     const topic = this.topic(this.config.outlet) + "/set";
     return new Promise((resolve, reject) => {
       this.mqttClient.publish(
