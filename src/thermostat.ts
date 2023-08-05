@@ -57,8 +57,15 @@ class Thermostat implements AccessoryPlugin {
 
     this.mqttClient.on("message", (topic, msg) => {
       const message = JSON.parse(msg.toString());
-      const { humidity, temperature } = message as Temperature;
-      this.setState({ humidity, temperature });
+      if(config.temperature == config.outlet) {
+        message.forEach( obj => this.renameKey( obj, 'local_temperature', 'temperature' ) );
+        const message = JSON.stringify(message);
+        const { local_temperature } = message as Temperature;
+        this.setState({ local_temperature });
+      } else {
+        const { humidity, temperature } = message as Temperature;
+        this.setState({ humidity, temperature });
+      }
     });
     
     this.service
@@ -198,6 +205,11 @@ class Thermostat implements AccessoryPlugin {
         }
       );
     });
+  }
+
+  renameKey ( obj, oldKey, newKey ) {
+    obj[newKey] = obj[oldKey];
+    delete obj[oldKey];
   }
 
   getServices(): Service[] {
