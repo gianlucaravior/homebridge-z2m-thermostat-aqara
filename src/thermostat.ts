@@ -67,7 +67,6 @@ class Thermostat implements AccessoryPlugin {
 
     this.mqttClient.on("message", (topic, msg) => {
       const message = JSON.parse(msg.toString());
-      const { system_mode } = message as Thermostat;
       this.setState({ system_mode });
     });
 
