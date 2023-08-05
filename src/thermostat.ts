@@ -128,7 +128,8 @@ class Thermostat implements AccessoryPlugin {
     this.service
       .getCharacteristic(this.characteristic.CurrentHeatingCoolingState)
       .updateValue(state.currentHeaterState);
-    
+
+    await this.SetCurrentTempOnOutlet(state.temperature);
     await this.SetTargetTempOnTherm(state.targetTemperature);
     const outletState = this.outletState(state);
     if (outletState !== this.outletState(oldState)) {
@@ -142,6 +143,25 @@ class Thermostat implements AccessoryPlugin {
 
   outletState({ targetHeatingState, currentHeaterState }: AccessoryState) {
     return targetHeatingState === 0 || currentHeaterState === 0 ? 0 : 1;
+  }
+
+  async SetCurrentTempOnOutlet(value: CharacteristicValue) {
+    // sensor has to be external
+        const sensor_temp = value;
+        const topic = this.topic(this.config.outlet) + "/set";
+        return new Promise((resolve, reject) => {
+          this.mqttClient.publish(
+            topic,
+            JSON.stringify({ sensor_temp }),
+            { qos: 2 },
+            (error) => {
+              if (error) {
+                return reject(error);
+              }
+              return resolve(value);
+            }
+          );
+        });
   }
 
   async SetTargetTempOnTherm(value: CharacteristicValue) {
