@@ -144,8 +144,8 @@ class Thermostat implements AccessoryPlugin {
     return targetHeatingState === 0 || currentHeaterState === 0 ? 0 : 1;
   }
 
-  async SetTargetTempOnTherm(temp: CharacteristicValue) {
-        const occupied_heating_setpoint = temp;
+  async SetTargetTempOnTherm(value: CharacteristicValue) {
+        const occupied_heating_setpoint = value;
         const topic = this.topic(this.config.outlet) + "/set";
         return new Promise((resolve, reject) => {
           this.mqttClient.publish(
