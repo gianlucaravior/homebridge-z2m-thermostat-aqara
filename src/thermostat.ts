@@ -56,10 +56,10 @@ class Thermostat implements AccessoryPlugin {
     });
 
     this.mqttClient.on("message", (topic, msg) => {
-      const message = JSON.parse(msg.toString());
+      message = JSON.parse(msg.toString());
       if(config.temperature == config.outlet) {
         message.forEach( obj => this.renameKey( obj, 'local_temperature', 'temperature' ) );
-        const message = JSON.stringify(message);
+        message = JSON.stringify(message);
         const { temperature } = message as Temperature;
         this.setState({ temperature });
       } else {
