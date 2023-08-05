@@ -21,7 +21,7 @@ interface Temperature {
 interface AccessoryState extends Pick<Temperature, "temperature" | "humidity"> {
   targetTemperature: CharacteristicValue;
   currentHeaterState: CharacteristicValue;
-  system_mode: CharacteristicValue;
+  targetHeatingState: CharacteristicValue;
 }
 
 class Thermostat implements AccessoryPlugin {
@@ -37,7 +37,7 @@ class Thermostat implements AccessoryPlugin {
     humidity: 0,
     targetTemperature: 20,
     currentHeaterState: 0,
-    system_mode: 0,
+    targetHeatingState: 0,
   };
 
   constructor(log: Logging, config: AccessoryConfig, api: API) {
@@ -61,6 +61,7 @@ class Thermostat implements AccessoryPlugin {
       this.setState({ humidity, temperature });
     });
 
+<<<<<<< HEAD
      this.mqttClient.on("connect", () => {
       this.mqttClient.subscribe(this.topic(config.outlet));
     });
@@ -70,6 +71,8 @@ class Thermostat implements AccessoryPlugin {
       this.setState({ system_mode });
     });
 
+=======
+>>>>>>> parent of 10099e3 (Update thermostat.ts)
     this.service
       .getCharacteristic(this.characteristic.CurrentTemperature)
       .onGet(() => this.state.temperature);
@@ -89,8 +92,8 @@ class Thermostat implements AccessoryPlugin {
         maxValue: 1,
         validValues: [0, 1],
       })
-      .onGet(() => this.state.system_mode)
-      .onSet((value) => this.setState({ system_mode: value }));
+      .onGet(() => this.state.targetHeatingState)
+      .onSet((value) => this.setState({ targetHeatingState: value }));
 
     this.service
       .getCharacteristic(this.characteristic.TargetTemperature)
@@ -114,7 +117,7 @@ class Thermostat implements AccessoryPlugin {
     const newState = { ...oldState, ...state };
     const targetTemperatureReached =
       newState.temperature > newState.targetTemperature;
-    if (newState.system_mode === 0) {
+    if (newState.targetHeatingState === 0) {
       newState.currentHeaterState = 0;
     } else {
       newState.currentHeaterState = targetTemperatureReached ? 0 : 1;
@@ -150,8 +153,8 @@ class Thermostat implements AccessoryPlugin {
     return `${this.config.mqtt.base_topic || "zigbee2mqtt"}/${value}`;
   }
 
-  outletState({ system_mode, currentHeaterState }: AccessoryState) {
-    return system_mode === 0 || currentHeaterState === 0 ? 0 : 1;
+  outletState({ targetHeatingState, currentHeaterState }: AccessoryState) {
+    return targetHeatingState === 0 || currentHeaterState === 0 ? 0 : 1;
   }
 
   async SetCurrentTempOnOutlet(value: CharacteristicValue) {
