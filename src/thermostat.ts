@@ -60,19 +60,7 @@ class Thermostat implements AccessoryPlugin {
       const { humidity, temperature } = message as Temperature;
       this.setState({ humidity, temperature });
     });
-
-<<<<<<< HEAD
-     this.mqttClient.on("connect", () => {
-      this.mqttClient.subscribe(this.topic(config.outlet));
-    });
-
-    this.mqttClient.on("message", (topic, msg) => {
-      const message = JSON.parse(msg.toString());
-      this.setState({ system_mode });
-    });
-
-=======
->>>>>>> parent of 10099e3 (Update thermostat.ts)
+    
     this.service
       .getCharacteristic(this.characteristic.CurrentTemperature)
       .onGet(() => this.state.temperature);
