@@ -110,8 +110,7 @@ class Thermostat implements AccessoryPlugin {
     } else {
       newState.currentHeaterState = targetTemperatureReached ? 0 : 1;
     }
-
-    await this.SetTargetTempOnTherm(newState.targetTemperature);
+    
     this.state = newState;
     await this.update(newState, oldState);
   }
@@ -130,7 +129,7 @@ class Thermostat implements AccessoryPlugin {
       .getCharacteristic(this.characteristic.CurrentHeatingCoolingState)
       .updateValue(state.currentHeaterState);
     
-
+    await this.SetTargetTempOnTherm(state.targetTemperature);
     const outletState = this.outletState(state);
     if (outletState !== this.outletState(oldState)) {
       await this.updateOutletState(outletState);
@@ -145,7 +144,7 @@ class Thermostat implements AccessoryPlugin {
     return targetHeatingState === 0 || currentHeaterState === 0 ? 0 : 1;
   }
 
-  async SetTargetTempOnTherm(temp: int) {
+  async SetTargetTempOnTherm(temp: CharacteristicValue) {
         const occupied_heating_setpoint = temp;
         const topic = this.topic(this.config.outlet) + "/set";
         return new Promise((resolve, reject) => {
@@ -163,7 +162,7 @@ class Thermostat implements AccessoryPlugin {
         });
   }
 
-  updateOutletState(value: CharacteristicValue, target: CharacteristicValue,): Promise<CharacteristicValue> {
+  updateOutletState(value: CharacteristicValue): Promise<CharacteristicValue> {
     const system_mode = value === 0 ? "off" : "heat";
     const topic = this.topic(this.config.outlet) + "/set";
     return new Promise((resolve, reject) => {
