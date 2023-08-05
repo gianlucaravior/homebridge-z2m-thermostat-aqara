@@ -60,8 +60,8 @@ class Thermostat implements AccessoryPlugin {
       if(config.temperature == config.outlet) {
         message.forEach( obj => this.renameKey( obj, 'local_temperature', 'temperature' ) );
         const message = JSON.stringify(message);
-        const { local_temperature } = message as Temperature;
-        this.setState({ local_temperature });
+        const { temperature } = message as Temperature;
+        this.setState({ temperature });
       } else {
         const { humidity, temperature } = message as Temperature;
         this.setState({ humidity, temperature });
