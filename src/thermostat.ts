@@ -136,7 +136,7 @@ class Thermostat implements AccessoryPlugin {
       .getCharacteristic(this.characteristic.CurrentHeatingCoolingState)
       .updateValue(state.currentHeaterState);
 
-    await this.SetCurrentTempOnOutlet(state.temperature);
+    //await this.SetCurrentTempOnOutlet(state.temperature);
     await this.SetTargetTempOnTherm(state.targetTemperature);
     const outletState = this.outletState(state);
     if (outletState !== this.outletState(oldState)) {
