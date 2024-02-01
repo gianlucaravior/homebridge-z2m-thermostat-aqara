@@ -14,6 +14,7 @@
   ],
   "rules": {
     "quotes": ["warn", "double"],
+    "indent": "off",
     "semi": ["off"],
     "dot-notation": "off",
     "eqeqeq": "warn",
@@ -25,7 +26,7 @@
     "no-non-null-assertion": ["off"],
     "comma-spacing": ["error"],
     "no-multi-spaces": ["warn", { "ignoreEOLComments": true }],
-    "no-trailing-spaces": ["warn"],
+    "no-trailing-spaces": ["off"],
     "lines-between-class-members": ["warn", "always", {"exceptAfterSingleLine": true}],
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
